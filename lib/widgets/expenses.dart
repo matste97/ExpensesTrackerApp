@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-
 import 'package:expensestrackerapp/widgets/new_expense.dart';
 import 'package:expensestrackerapp/widgets/expenses_list/expenses_list.dart';
 import 'package:expensestrackerapp/models/expense.dart';
 import 'package:expensestrackerapp/widgets/chart/chart.dart';
 import 'package:expensestrackerapp/widgets/change_expense.dart';
 
+// Define a stateful widget 'Expenses' for managing expenses.
 class Expenses extends StatefulWidget {
   const Expenses({super.key});
 
@@ -15,7 +15,9 @@ class Expenses extends StatefulWidget {
   }
 }
 
+// Define the state for the 'Expenses' widget.
 class _ExpensesState extends State<Expenses> {
+  // List to store registered expenses (initially populated with sample data).
   final List<Expense> _registeredExpenses = [
     Expense(
       title: 'Flutter Course',
@@ -31,6 +33,7 @@ class _ExpensesState extends State<Expenses> {
     ),
   ];
 
+  // Function to open the 'NewExpense' overlay.
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
       isScrollControlled: true,
@@ -39,12 +42,14 @@ class _ExpensesState extends State<Expenses> {
     );
   }
 
+  // Function to add a new expense to the list.
   void _addExpense(Expense expense) {
     setState(() {
       _registeredExpenses.add(expense);
     });
   }
 
+  // Function to remove an expense from the list and show a snackbar.
   void _removeExpense(Expense expense) {
     final expenseIndex = _registeredExpenses.indexOf(expense);
     setState(() {
@@ -67,6 +72,7 @@ class _ExpensesState extends State<Expenses> {
     );
   }
 
+  // Function to open the 'ChangeExpense' overlay for editing an expense.
   void _openChangeExpense(Expense expense, int index) {
     showModalBottomSheet(
       context: context,
@@ -78,7 +84,7 @@ class _ExpensesState extends State<Expenses> {
     );
   }
 
-  // Function to edit an existing expense
+  // Function to edit an existing expense.
   void _changeExpense(Expense updatedExpense, int index) {
     setState(() {
       _registeredExpenses[index] = updatedExpense;
@@ -87,10 +93,12 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    // Initialize 'mainContent' with a message when no expenses are present.
     Widget mainContent = const Center(
       child: Text('No expenses found. Start adding some!'),
     );
 
+    // If there are expenses in the list, update 'mainContent' to display the list.
     if (_registeredExpenses.isNotEmpty) {
       mainContent = ExpensesList(
         expenses: _registeredExpenses,
@@ -99,6 +107,7 @@ class _ExpensesState extends State<Expenses> {
       );
     }
 
+    // Build the main scaffold with an app bar, chart, and expenses list.
     return Scaffold(
       appBar: AppBar(
         title: const Text('Flutter ExpenseTracker'),
@@ -111,7 +120,10 @@ class _ExpensesState extends State<Expenses> {
       ),
       body: Column(
         children: [
+          // Display a chart summarizing expenses.
           Chart(expenses: _registeredExpenses),
+
+          // Display either "No expenses found" or the list of expenses.
           Expanded(
             child: mainContent,
           ),

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-
 import 'package:expensestrackerapp/widgets/chart/chart_bar.dart';
 import 'package:expensestrackerapp/models/expense.dart';
 
+// Define a stateless widget 'Chart' for displaying an expense chart.
 class Chart extends StatelessWidget {
   const Chart({super.key, required this.expenses});
 
   final List<Expense> expenses;
 
+  // Calculate and return a list of 'ExpenseBucket' objects for different categories.
   List<ExpenseBucket> get buckets {
     return [
       ExpenseBucket.forCategory(expenses, Category.food),
@@ -17,6 +18,7 @@ class Chart extends StatelessWidget {
     ];
   }
 
+  // Calculate the maximum total expense among all categories.
   double get maxTotalExpense {
     double maxTotalExpense = 0;
 
@@ -31,6 +33,7 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Determine if the app is in dark mode.
     final isDarkMode =
         MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Container(
@@ -58,7 +61,8 @@ class Chart extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                for (final bucket in buckets) // alternative to map()
+                for (final bucket in buckets)
+                  // Create 'ChartBar' widgets for each category bucket.
                   ChartBar(
                     fill: bucket.totalExpenses == 0
                         ? 0
@@ -67,15 +71,16 @@ class Chart extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 12), // Add some vertical spacing.
           Row(
-            children: buckets // for ... in
+            children: buckets
                 .map(
                   (bucket) => Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
                       child: Icon(
                         categoryIcons[bucket.category],
+                        // Set icon color based on dark mode or light mode.
                         color: isDarkMode
                             ? Theme.of(context).colorScheme.secondary
                             : Theme.of(context)

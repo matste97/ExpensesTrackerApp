@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:expensestrackerapp/models/expense.dart';
 
+// Define a stateful widget 'ChangeExpense' for editing an expense.
 class ChangeExpense extends StatefulWidget {
   const ChangeExpense({super.key, required this.onChangeExpense});
 
@@ -12,18 +13,19 @@ class ChangeExpense extends StatefulWidget {
   }
 }
 
+// Define the state for the 'ChangeExpense' widget.
 class _ChangeExpenseState extends State<ChangeExpense> {
-  // Controllers for title and amount text fields
+  // Controllers for title and amount text fields.
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
 
-  // Selected date for the expense
+  // Selected date for the expense.
   DateTime? _selectedDate;
 
-  // Selected category for the expense
+  // Selected category for the expense.
   Category _selectedCategory = Category.leisure;
 
-  // Function to present the date picker
+  // Function to present the date picker.
   void _presentDatePicker() async {
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 1, now.month, now.day);
@@ -38,11 +40,11 @@ class _ChangeExpenseState extends State<ChangeExpense> {
     });
   }
 
-  // Function to submit edited expense data
+  // Function to submit edited expense data.
   void _submitExpenseData() {
     final enteredAmount = double.tryParse(_amountController.text);
 
-    // Check for input validation
+    // Check for input validation.
     final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
     if (_titleController.text.trim().isEmpty ||
         amountIsInvalid ||
@@ -66,7 +68,7 @@ class _ChangeExpenseState extends State<ChangeExpense> {
       return;
     }
 
-    // Invoke the callback to edit the expense
+    // Invoke the callback to edit the expense.
     widget.onChangeExpense(
       Expense(
         title: _titleController.text,
@@ -76,10 +78,11 @@ class _ChangeExpenseState extends State<ChangeExpense> {
       ),
     );
 
-    // Close the edit expense form
+    // Close the edit expense form.
     Navigator.pop(context);
   }
 
+  // Dispose of text controllers when the widget is disposed.
   @override
   void dispose() {
     _titleController.dispose();
@@ -89,11 +92,12 @@ class _ChangeExpenseState extends State<ChangeExpense> {
 
   @override
   Widget build(BuildContext context) {
-    // Build the UI for editing an expense
+    // Build the UI for editing an expense.
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
       child: Column(
         children: [
+          // Text field for editing the expense title.
           TextField(
             controller: _titleController,
             maxLength: 50,
@@ -103,6 +107,7 @@ class _ChangeExpenseState extends State<ChangeExpense> {
           ),
           Row(
             children: [
+              // Text field for editing the expense amount.
               Expanded(
                 child: TextField(
                   controller: _amountController,
@@ -119,6 +124,7 @@ class _ChangeExpenseState extends State<ChangeExpense> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    // Display the selected date or show a date picker dialog.
                     Text(
                       _selectedDate == null
                           ? 'No date selected'
@@ -138,6 +144,7 @@ class _ChangeExpenseState extends State<ChangeExpense> {
           const SizedBox(height: 16),
           Row(
             children: [
+              // Dropdown button for selecting the expense category.
               DropdownButton(
                 value: _selectedCategory,
                 items: Category.values
@@ -160,12 +167,14 @@ class _ChangeExpenseState extends State<ChangeExpense> {
                 },
               ),
               const Spacer(),
+              // Button to cancel editing.
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
                 child: const Text('Cancel'),
               ),
+              // Button to save the edited expense.
               ElevatedButton(
                 onPressed: _submitExpenseData,
                 child: const Text('Save Expense'),
